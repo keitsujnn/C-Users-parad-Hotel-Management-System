@@ -37,52 +37,108 @@
 <!-- ============ AUTH VIEW ============ -->
 <main id="authView" class="auth-view">
   <section class="auth-card glass">
-    <div class="auth-head">
-      <span class="eyebrow"></span>
-      <h1>Hotel Management System</h1>
-      <p class="muted">Sign in to search rooms, manage reservations, or oversee the property.</p>
+
+    <!-- LOGIN / REGISTER -->
+    <div id="authTabsWrap">
+      <div class="auth-head">
+        <span class="eyebrow">Key 01 — Access</span>
+        <h1>Hotel Management System</h1>
+        <p class="muted">Sign in to search rooms, manage reservations, or oversee the property.</p>
+      </div>
+
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="login">Sign in</button>
+        <button class="tab-btn" data-tab="register">Register</button>
+      </div>
+
+      <!-- LOGIN -->
+      <form id="loginForm" class="auth-form">
+        <label>Email
+          <input type="email" id="loginEmail" required placeholder="you@example.com" />
+        </label>
+        <label>Password
+          <input type="password" id="loginPassword" required placeholder="••••••••" />
+        </label>
+        <button type="button" id="forgotPasswordLink" class="link-btn">Forgot password?</button>
+        <button type="submit" class="btn btn-primary full">Sign in</button>
+        <p class="form-msg" id="loginMsg"></p>
+      </form>
+
+      <!-- REGISTER -->
+      <form id="registerForm" class="auth-form hidden">
+        <label>Full name
+          <input type="text" id="regName" required placeholder="Darwin A. Tabranero" />
+        </label>
+        <label>Contact number
+          <input type="text" id="regContact" required placeholder="09xx xxx xxxx" pattern="^[0-9+ -]{7,15}$" />
+        </label>
+        <label>Email
+          <input type="email" id="regEmail" required placeholder="you@example.com" />
+        </label>
+        <label>Password
+          <input type="password" id="regPassword" required minlength="6" placeholder="At least 6 characters" />
+        </label>
+        <label>Confirm password
+          <input type="password" id="regPassword2" required minlength="6" placeholder="Re-enter password" />
+        </label>
+        <p class="hint">New accounts are registered as guests. Staff and admin accounts are promoted by an administrator.</p>
+        <button type="submit" class="btn btn-primary full">Create account</button>
+        <p class="form-msg" id="registerMsg"></p>
+      </form>
     </div>
 
-    <div class="tabs">
-      <button class="tab-btn active" data-tab="login">Sign in</button>
-      <button class="tab-btn" data-tab="register">Register</button>
+    <!-- FORGOT PASSWORD -->
+    <div id="forgotWrap" class="hidden">
+      <div class="auth-head">
+        <span class="eyebrow">Key 01 — Access</span>
+        <h1>Reset your password</h1>
+        <p class="muted">Enter your account email — we'll send a reset link.</p>
+      </div>
+      <form id="forgotForm" class="auth-form">
+        <label>Email
+          <input type="email" id="forgotEmail" required placeholder="you@example.com" />
+        </label>
+        <button type="submit" class="btn btn-primary full">Send reset link</button>
+        <button type="button" id="backToLoginLink" class="link-btn">Back to sign in</button>
+        <p class="form-msg" id="forgotMsg"></p>
+      </form>
     </div>
 
-    <!-- LOGIN -->
-    <form id="loginForm" class="auth-form">
-      <label>Email
-        <input type="email" id="loginEmail" required placeholder="you@example.com" />
-      </label>
-      <label>Password
-        <input type="password" id="loginPassword" required placeholder="••••••••" />
-      </label>
-      <button type="submit" class="btn btn-primary full">Sign in</button>
-      <p class="form-msg" id="loginMsg"></p>
-    </form>
+    <!-- SET NEW PASSWORD (landed here via recovery email link) -->
+    <div id="resetWrap" class="hidden">
+      <div class="auth-head">
+        <span class="eyebrow">Key 01 — Access</span>
+        <h1>Choose a new password</h1>
+        <p class="muted">You're verified — set a new password to finish.</p>
+      </div>
+      <form id="resetForm" class="auth-form">
+        <label>New password
+          <input type="password" id="resetPassword" required minlength="6" placeholder="At least 6 characters" />
+        </label>
+        <button type="submit" class="btn btn-primary full">Update password</button>
+        <p class="form-msg" id="resetMsg"></p>
+      </form>
+    </div>
 
-    <!-- REGISTER -->
-    <form id="registerForm" class="auth-form hidden">
-      <label>Full name
-        <input type="text" id="regName" required placeholder="Darwin A. Tabranero" />
-      </label>
-      <label>Contact number
-        <input type="text" id="regContact" required placeholder="09xx xxx xxxx" />
-      </label>
-      <label>Email
-        <input type="email" id="regEmail" required placeholder="you@example.com" />
-      </label>
-      <label>Password
-        <input type="password" id="regPassword" required minlength="6" placeholder="At least 6 characters" />
-      </label>
-      <p class="hint">New accounts are registered as guests. Staff and admin accounts are promoted by an administrator.</p>
-      <button type="submit" class="btn btn-primary full">Create account</button>
-      <p class="form-msg" id="registerMsg"></p>
-    </form>
   </section>
 </main>
 
 <!-- ============ APP VIEWS ============ -->
 <main id="appView" class="app-view hidden">
+
+  <!-- ---- DASHBOARD (staff / admin) ---- -->
+  <section id="view-dashboard" class="view hidden">
+    <div class="view-head">
+      <span class="eyebrow">Overview</span>
+      <h2>Dashboard</h2>
+      <p class="muted">A snapshot of the property right now.</p>
+    </div>
+    <div id="statsCards" class="stats-grid"></div>
+    <div id="revenueSection" class="glass revenue-card hidden">
+      <h3>Revenue (last 30 days)</h3>
+      <div id="revenueBars" class="revenue-bars"></div>
+    </div>
+  </section>
 
   <!-- ---- GUEST: SEARCH & BOOK ---- -->
   <section id="view-search" class="view">
@@ -118,9 +174,31 @@
     <div class="view-head">
       <span class="eyebrow">Key 03 — Your Stays</span>
       <h2>My reservations</h2>
-      <p class="muted">Track booking status and settle payment.</p>
+      <p class="muted">Track booking status, settle payment, print a receipt, or show your QR code at the desk.</p>
     </div>
     <div id="myBookingsList" class="list-stack"></div>
+  </section>
+
+  <!-- ---- GUEST: PROFILE ---- -->
+  <section id="view-profile" class="view hidden">
+    <div class="view-head">
+      <span class="eyebrow">Account</span>
+      <h2>My profile</h2>
+      <p class="muted">Keep your contact details up to date.</p>
+    </div>
+    <form id="profileForm" class="glass profile-form">
+      <label>Full name <input type="text" id="profileName" required /></label>
+      <label>Contact number <input type="text" id="profileContact" /></label>
+      <label>Email <input type="email" id="profileEmail" disabled /></label>
+      <button type="submit" class="btn btn-primary">Save changes</button>
+      <p class="form-msg" id="profileMsg"></p>
+    </form>
+    <form id="passwordForm" class="glass profile-form">
+      <h3>Change password</h3>
+      <label>New password <input type="password" id="newPassword" minlength="6" required /></label>
+      <button type="submit" class="btn btn-ghost">Update password</button>
+      <p class="form-msg" id="passwordMsg"></p>
+    </form>
   </section>
 
   <!-- ---- STAFF: MANAGE RESERVATIONS ---- -->
@@ -130,10 +208,50 @@
       <h2>Manage reservations</h2>
       <p class="muted">Confirm bookings, check guests in, and check guests out.</p>
     </div>
+    <div class="glass filter-bar">
+      <label class="grow">Search
+        <input type="text" id="staffSearch" placeholder="Guest name or room number" />
+      </label>
+      <label>Status
+        <select id="staffStatusFilter">
+          <option value="">All statuses</option>
+          <option value="pending">Pending</option>
+          <option value="confirmed">Confirmed</option>
+          <option value="checked_in">Checked in</option>
+          <option value="checked_out">Checked out</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
+      </label>
+    </div>
     <div id="staffList" class="list-stack"></div>
+    <div id="staffPagination" class="pagination"></div>
   </section>
 
-  <!-- ---- ADMIN: MANAGE ROOMS ---- -->
+  <!-- ---- STAFF/ADMIN: PAYMENT RECORDS ---- -->
+  <section id="view-payments" class="view hidden">
+    <div class="view-head">
+      <span class="eyebrow">Front Desk</span>
+      <h2>Payment records</h2>
+      <p class="muted">All payments across every reservation.</p>
+    </div>
+    <div class="glass filter-bar">
+      <label class="grow">Search
+        <input type="text" id="paymentsSearch" placeholder="Guest name or room number" />
+      </label>
+      <label>Status
+        <select id="paymentsStatusFilter">
+          <option value="">All statuses</option>
+          <option value="unpaid">Unpaid</option>
+          <option value="paid">Paid</option>
+          <option value="refunded">Refunded</option>
+        </select>
+      </label>
+    </div>
+    <div id="paymentsList" class="list-stack"></div>
+    <div id="paymentsPagination" class="pagination"></div>
+  </section>
+
+  <!-- ---- ADMIN/STAFF: MANAGE ROOMS ---- -->
   <section id="view-admin-rooms" class="view hidden">
     <div class="view-head">
       <span class="eyebrow">Administration</span>
@@ -154,14 +272,20 @@
       <label>Price (₱/night) <input type="number" id="roomPrice" min="0" step="1" required /></label>
       <label>Capacity <input type="number" id="roomCapacity" min="1" step="1" required /></label>
       <label class="span-2">Description <input type="text" id="roomDescription" placeholder="Short description" /></label>
+      <label class="span-2">Room image <input type="file" id="roomImageFile" accept="image/*" /></label>
       <label class="checkbox"><input type="checkbox" id="roomAvailability" checked /> Available</label>
       <div class="form-actions">
         <button type="submit" class="btn btn-primary">Save room</button>
         <button type="button" id="roomFormReset" class="btn btn-ghost">Clear</button>
       </div>
+      <p class="form-msg span-2" id="roomFormMsg"></p>
     </form>
 
+    <div class="glass filter-bar">
+      <label class="grow">Search <input type="text" id="roomsSearch" placeholder="Room number or type" /></label>
+    </div>
     <div id="adminRoomsList" class="list-stack"></div>
+    <div id="roomsPagination" class="pagination"></div>
   </section>
 
   <!-- ---- ADMIN: MANAGE USERS ---- -->
@@ -171,7 +295,30 @@
       <h2>Manage users</h2>
       <p class="muted">Adjust roles for guests, front-desk staff, and admins.</p>
     </div>
+    <div class="glass filter-bar">
+      <label class="grow">Search <input type="text" id="usersSearch" placeholder="Name or contact" /></label>
+      <label>Role
+        <select id="usersRoleFilter">
+          <option value="">All roles</option>
+          <option value="guest">Guest</option>
+          <option value="staff">Staff</option>
+          <option value="admin">Admin</option>
+        </select>
+      </label>
+    </div>
     <div id="usersList" class="list-stack"></div>
+    <div id="usersPagination" class="pagination"></div>
+  </section>
+
+  <!-- ---- ADMIN: ACTIVITY LOGS ---- -->
+  <section id="view-activity" class="view hidden">
+    <div class="view-head">
+      <span class="eyebrow">Administration</span>
+      <h2>Activity logs</h2>
+      <p class="muted">A running audit trail of key actions across the system.</p>
+    </div>
+    <div id="activityList" class="list-stack"></div>
+    <div id="activityPagination" class="pagination"></div>
   </section>
 
 </main>
@@ -213,10 +360,31 @@
   </div>
 </div>
 
+<!-- ============ RECEIPT / QR MODAL ============ -->
+<div id="receiptModal" class="modal-overlay hidden">
+  <div class="modal glass" id="receiptModalInner">
+    <button class="modal-close no-print" id="closeReceiptModal">&times;</button>
+    <div id="receiptContent" class="receipt">
+      <div class="receipt-head">
+        <span class="brand-mark">HM</span>
+        <div>
+          <h3>Hotel Management System</h3>
+          <p class="muted">Booking receipt</p>
+        </div>
+      </div>
+      <div id="receiptBody"></div>
+      <div id="receiptQR" class="qr-box"></div>
+      <p class="muted receipt-footnote">Present this QR code at the front desk during check-in.</p>
+    </div>
+    <button id="printReceiptBtn" class="btn btn-primary full no-print">Print receipt</button>
+  </div>
+</div>
+
 <!-- ============ TOAST ============ -->
 <div id="toast" class="toast hidden"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="config.js"></script>
 <script src="app.js"></script>
 </body>
