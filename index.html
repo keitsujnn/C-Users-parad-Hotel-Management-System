@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Hotel Management System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- Ambient background blobs -->
+<div class="ambient">
+  <div class="blob blob-a"></div>
+  <div class="blob blob-b"></div>
+  <div class="blob blob-c"></div>
+  <div class="grain"></div>
+</div>
+
+<!-- ============ TOP BAR ============ -->
+<header id="topbar" class="topbar hidden">
+  <div class="brand">
+    <span class="brand-mark">HM</span>
+    <div class="brand-text">
+      <span class="brand-title">Hotel Management System</span>
+      <span class="brand-sub" id="roleBadge">—</span>
+    </div>
+  </div>
+  <nav id="mainNav" class="main-nav"></nav>
+  <div class="topbar-right">
+    <span id="userName" class="user-name"></span>
+    <button id="logoutBtn" class="btn btn-ghost">Sign out</button>
+  </div>
+</header>
+
+<!-- ============ AUTH VIEW ============ -->
+<main id="authView" class="auth-view">
+  <section class="auth-card glass">
+    <div class="auth-head">
+      <span class="eyebrow"></span>
+      <h1>Hotel Management System</h1>
+      <p class="muted">Sign in to search rooms, manage reservations, or oversee the property.</p>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="login">Sign in</button>
+      <button class="tab-btn" data-tab="register">Register</button>
+    </div>
+
+    <!-- LOGIN -->
+    <form id="loginForm" class="auth-form">
+      <label>Email
+        <input type="email" id="loginEmail" required placeholder="you@example.com" />
+      </label>
+      <label>Password
+        <input type="password" id="loginPassword" required placeholder="••••••••" />
+      </label>
+      <button type="submit" class="btn btn-primary full">Sign in</button>
+      <p class="form-msg" id="loginMsg"></p>
+    </form>
+
+    <!-- REGISTER -->
+    <form id="registerForm" class="auth-form hidden">
+      <label>Full name
+        <input type="text" id="regName" required placeholder="Darwin A. Tabranero" />
+      </label>
+      <label>Contact number
+        <input type="text" id="regContact" required placeholder="09xx xxx xxxx" />
+      </label>
+      <label>Email
+        <input type="email" id="regEmail" required placeholder="you@example.com" />
+      </label>
+      <label>Password
+        <input type="password" id="regPassword" required minlength="6" placeholder="At least 6 characters" />
+      </label>
+      <p class="hint">New accounts are registered as guests. Staff and admin accounts are promoted by an administrator.</p>
+      <button type="submit" class="btn btn-primary full">Create account</button>
+      <p class="form-msg" id="registerMsg"></p>
+    </form>
+  </section>
+</main>
+
+<!-- ============ APP VIEWS ============ -->
+<main id="appView" class="app-view hidden">
+
+  <!-- ---- GUEST: SEARCH & BOOK ---- -->
+  <section id="view-search" class="view">
+    <div class="view-head">
+      <span class="eyebrow">Key 02 — Availability</span>
+      <h2>Search available rooms</h2>
+      <p class="muted">Choose your dates to see what's open, then reserve on the spot.</p>
+    </div>
+
+    <div class="glass filter-bar">
+      <label>Check-in
+        <input type="date" id="filterCheckIn" />
+      </label>
+      <label>Check-out
+        <input type="date" id="filterCheckOut" />
+      </label>
+      <label>Room type
+        <select id="filterType">
+          <option value="">Any type</option>
+          <option value="Standard">Standard</option>
+          <option value="Deluxe">Deluxe</option>
+          <option value="Suite">Suite</option>
+        </select>
+      </label>
+      <button id="searchBtn" class="btn btn-primary">Search</button>
+    </div>
+
+    <div id="roomsGrid" class="rooms-grid"></div>
+  </section>
+
+  <!-- ---- GUEST: MY RESERVATIONS ---- -->
+  <section id="view-mybookings" class="view hidden">
+    <div class="view-head">
+      <span class="eyebrow">Key 03 — Your Stays</span>
+      <h2>My reservations</h2>
+      <p class="muted">Track booking status and settle payment.</p>
+    </div>
+    <div id="myBookingsList" class="list-stack"></div>
+  </section>
+
+  <!-- ---- STAFF: MANAGE RESERVATIONS ---- -->
+  <section id="view-staff" class="view hidden">
+    <div class="view-head">
+      <span class="eyebrow">Front Desk</span>
+      <h2>Manage reservations</h2>
+      <p class="muted">Confirm bookings, check guests in, and check guests out.</p>
+    </div>
+    <div id="staffList" class="list-stack"></div>
+  </section>
+
+  <!-- ---- ADMIN: MANAGE ROOMS ---- -->
+  <section id="view-admin-rooms" class="view hidden">
+    <div class="view-head">
+      <span class="eyebrow">Administration</span>
+      <h2>Manage rooms &amp; prices</h2>
+      <p class="muted">Add, edit, or retire rooms from the property inventory.</p>
+    </div>
+
+    <form id="roomForm" class="glass room-form">
+      <input type="hidden" id="roomId" />
+      <label>Room number <input type="text" id="roomNumber" required /></label>
+      <label>Type
+        <select id="roomType" required>
+          <option value="Standard">Standard</option>
+          <option value="Deluxe">Deluxe</option>
+          <option value="Suite">Suite</option>
+        </select>
+      </label>
+      <label>Price (₱/night) <input type="number" id="roomPrice" min="0" step="1" required /></label>
+      <label>Capacity <input type="number" id="roomCapacity" min="1" step="1" required /></label>
+      <label class="span-2">Description <input type="text" id="roomDescription" placeholder="Short description" /></label>
+      <label class="checkbox"><input type="checkbox" id="roomAvailability" checked /> Available</label>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Save room</button>
+        <button type="button" id="roomFormReset" class="btn btn-ghost">Clear</button>
+      </div>
+    </form>
+
+    <div id="adminRoomsList" class="list-stack"></div>
+  </section>
+
+  <!-- ---- ADMIN: MANAGE USERS ---- -->
+  <section id="view-admin-users" class="view hidden">
+    <div class="view-head">
+      <span class="eyebrow">Administration</span>
+      <h2>Manage users</h2>
+      <p class="muted">Adjust roles for guests, front-desk staff, and admins.</p>
+    </div>
+    <div id="usersList" class="list-stack"></div>
+  </section>
+
+</main>
+
+<!-- ============ BOOKING MODAL ============ -->
+<div id="bookingModal" class="modal-overlay hidden">
+  <div class="modal glass">
+    <button class="modal-close" id="closeModal">&times;</button>
+    <span class="eyebrow">Reservation</span>
+    <h3 id="modalRoomTitle">Room</h3>
+    <p class="muted" id="modalRoomDesc"></p>
+    <div class="modal-grid">
+      <label>Check-in <input type="date" id="modalCheckIn" required /></label>
+      <label>Check-out <input type="date" id="modalCheckOut" required /></label>
+    </div>
+    <p class="modal-total">Total: <strong id="modalTotal">₱0.00</strong></p>
+    <button id="confirmBookingBtn" class="btn btn-primary full">Reserve this room</button>
+    <p class="form-msg" id="modalMsg"></p>
+  </div>
+</div>
+
+<!-- ============ PAYMENT MODAL ============ -->
+<div id="paymentModal" class="modal-overlay hidden">
+  <div class="modal glass">
+    <button class="modal-close" id="closePaymentModal">&times;</button>
+    <span class="eyebrow">Payment</span>
+    <h3>Complete your payment</h3>
+    <p class="muted" id="paymentSummary"></p>
+    <label>Payment method
+      <select id="paymentMethod">
+        <option value="card">Card</option>
+        <option value="gcash">GCash</option>
+        <option value="bank_transfer">Bank transfer</option>
+        <option value="cash">Cash at front desk</option>
+      </select>
+    </label>
+    <button id="confirmPaymentBtn" class="btn btn-primary full">Pay now</button>
+    <p class="form-msg" id="paymentMsg"></p>
+  </div>
+</div>
+
+<!-- ============ TOAST ============ -->
+<div id="toast" class="toast hidden"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
