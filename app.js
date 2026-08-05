@@ -226,7 +226,7 @@ $("#logoutBtn").addEventListener("click", async () => {
   await supabase.auth.signOut();
   currentUser = null;
   currentProfile = null;
-  $("#topbar").classList.add("hidden");
+  $("#appShell").classList.add("hidden");
   $("#appView").classList.add("hidden");
   $("#authView").classList.remove("hidden");
   $("#resetWrap").classList.add("hidden");
@@ -252,7 +252,7 @@ async function bootAfterAuth(){
   currentProfile = profile;
 
   $("#authView").classList.add("hidden");
-  $("#topbar").classList.remove("hidden");
+  $("#appShell").classList.remove("hidden");
   $("#appView").classList.remove("hidden");
   $("#userName").textContent = profile.full_name;
   $("#roleBadge").textContent = profile.role.toUpperCase();
@@ -315,10 +315,16 @@ function buildNav(){
     btn.className = "nav-btn";
     btn.textContent = item.label;
     btn.dataset.view = item.id;
-    btn.addEventListener("click", () => goToView(item.id));
+    btn.addEventListener("click", () => {
+      goToView(item.id);
+      $("#sidebar").classList.remove("open"); // auto-close on mobile after picking a section
+    });
     nav.appendChild(btn);
   });
 }
+$("#sidebarToggle").addEventListener("click", () => {
+  $("#sidebar").classList.toggle("open");
+});
 function goToView(viewId){
   $$(".view").forEach(v => v.classList.add("hidden"));
   const target = $("#" + viewId);
