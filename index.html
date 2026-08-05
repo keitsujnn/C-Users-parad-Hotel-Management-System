@@ -18,21 +18,26 @@
   <div class="grain"></div>
 </div>
 
-<!-- ============ TOP BAR ============ -->
-<header id="topbar" class="topbar hidden">
-  <div class="brand">
-    <span class="brand-mark">HM</span>
-    <div class="brand-text">
-      <span class="brand-title">Hotel Management System</span>
-      <span class="brand-sub" id="roleBadge">—</span>
+<!-- ============ APP SHELL (sidebar + content) ============ -->
+<div id="appShell" class="app-shell hidden">
+  <aside id="sidebar" class="sidebar glass">
+    <div class="brand">
+      <span class="brand-mark">HM</span>
+      <div class="brand-text">
+        <span class="brand-title">Hotel Management System</span>
+        <span class="brand-sub" id="roleBadge">—</span>
+      </div>
     </div>
-  </div>
-  <nav id="mainNav" class="main-nav"></nav>
-  <div class="topbar-right">
-    <span id="userName" class="user-name"></span>
-    <button id="logoutBtn" class="btn btn-ghost">Sign out</button>
-  </div>
-</header>
+
+    <button id="sidebarToggle" class="sidebar-toggle" aria-label="Toggle menu">☰</button>
+
+    <nav id="mainNav" class="main-nav"></nav>
+
+    <div class="sidebar-footer">
+      <span id="userName" class="user-name"></span>
+      <button id="logoutBtn" class="btn btn-ghost full">Sign out</button>
+    </div>
+  </aside>
 
 <!-- ============ AUTH VIEW ============ -->
 <main id="authView" class="auth-view">
@@ -124,7 +129,8 @@
 </main>
 
 <!-- ============ APP VIEWS ============ -->
-<main id="appView" class="app-view hidden">
+  <div class="content-column">
+  <main id="appView" class="app-view hidden">
 
   <!-- ---- DASHBOARD (staff / admin) ---- -->
   <section id="view-dashboard" class="view hidden">
@@ -181,11 +187,12 @@
 
   <!-- ---- GUEST: PROFILE ---- -->
   <section id="view-profile" class="view hidden">
-    <div class="view-head">
+    <div class="view-head view-head-center">
       <span class="eyebrow">Account</span>
       <h2>My profile</h2>
       <p class="muted">Keep your contact details up to date.</p>
     </div>
+    <div class="profile-center">
     <form id="profileForm" class="glass profile-form">
       <label>Full name <input type="text" id="profileName" required /></label>
       <label>Contact number <input type="text" id="profileContact" /></label>
@@ -199,6 +206,7 @@
       <button type="submit" class="btn btn-ghost">Update password</button>
       <p class="form-msg" id="passwordMsg"></p>
     </form>
+    </div>
   </section>
 
   <!-- ---- STAFF: MANAGE RESERVATIONS ---- -->
@@ -321,7 +329,10 @@
     <div id="activityPagination" class="pagination"></div>
   </section>
 
-</main>
+  </main>
+  </div>
+</div>
+<!-- end #appShell -->
 
 <!-- ============ BOOKING MODAL ============ -->
 <div id="bookingModal" class="modal-overlay hidden">
