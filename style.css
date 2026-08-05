@@ -691,3 +691,249 @@ label.checkbox input{ width: auto; padding: 0; accent-color: var(--brass); }
 
 /* Small responsive polish for new grow filter fields */
 .filter-bar label.grow{ flex: 2; min-width: 200px; }
+/* =========================================================
+   COLLAPSIBLE SIDEBAR — clean desktop + mobile navigation
+   ========================================================= */
+.app-shell{
+  position: relative;
+  gap: 16px;
+  transition: gap .25s ease;
+}
+
+.sidebar{
+  overflow: hidden;
+  transition: width .25s ease, padding .25s ease, opacity .2s ease, border-color .25s ease;
+}
+
+.sidebar-toggle{
+  position: fixed;
+  top: 28px;
+  left: 270px;
+  z-index: 1000;
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  background: rgba(10,26,30,.78);
+  color: var(--ivory);
+  box-shadow: 0 8px 24px rgba(0,0,0,.25);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  cursor: pointer;
+  transition: left .25s ease, background .15s ease, transform .15s ease;
+}
+.sidebar-toggle:hover{
+  background: rgba(201,162,75,.16);
+  border-color: rgba(201,162,75,.42);
+}
+.sidebar-toggle:active{ transform: scale(.95); }
+
+.menu-icon{
+  width: 18px;
+  height: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.menu-icon span{
+  display: block;
+  width: 100%;
+  height: 2px;
+  border-radius: 99px;
+  background: currentColor;
+  transition: transform .2s ease, opacity .2s ease;
+}
+
+.app-shell.sidebar-collapsed{
+  gap: 0;
+}
+.app-shell.sidebar-collapsed .sidebar{
+  width: 0;
+  padding-left: 0;
+  padding-right: 0;
+  border-color: transparent;
+  opacity: 0;
+  pointer-events: none;
+}
+.app-shell.sidebar-collapsed .sidebar-toggle{
+  left: 18px;
+}
+.app-shell.sidebar-collapsed .menu-icon span:first-child{
+  transform: translateY(7px) rotate(45deg);
+}
+.app-shell.sidebar-collapsed .menu-icon span:nth-child(2){
+  opacity: 0;
+}
+.app-shell.sidebar-collapsed .menu-icon span:last-child{
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+@media (max-width: 860px){
+  .app-shell{
+    flex-direction: column;
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .sidebar{
+    position: relative;
+    top: 0;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .sidebar-toggle{
+    position: absolute;
+    top: 25px;
+    right: 24px;
+    left: auto;
+    width: 40px;
+    height: 40px;
+    background: rgba(243,237,226,.06);
+    box-shadow: none;
+  }
+
+  .main-nav{
+    display: none;
+    flex-direction: column;
+    max-height: 60vh;
+  }
+
+  .sidebar.open .main-nav{ display: flex; }
+
+  .sidebar-footer{ display: none; }
+  .sidebar.open .sidebar-footer{ display: flex; }
+
+  /* On phones the button controls the menu rather than shrinking the shell. */
+  .app-shell.sidebar-collapsed .sidebar{
+    width: 100%;
+    padding: 22px 18px;
+    border-color: var(--glass-border);
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .app-shell.sidebar-collapsed .sidebar .main-nav,
+  .app-shell.sidebar-collapsed .sidebar .sidebar-footer{
+    display: none;
+  }
+
+  .app-shell.sidebar-collapsed .sidebar-toggle{
+    left: auto;
+    right: 24px;
+  }
+}
+
+
+/* =========================================================
+   SIDEBAR TOGGLE — FINAL FIX
+   Open = X / Close, Collapsed = hamburger / Open
+   ========================================================= */
+.sidebar-toggle{
+  left: 282px;
+  right: auto;
+  transition: left .28s ease, right .28s ease, background .15s ease, transform .15s ease;
+}
+
+/* Sidebar is OPEN by default: show X */
+.sidebar-toggle .menu-icon span:first-child{
+  transform: translateY(7px) rotate(45deg);
+}
+.sidebar-toggle .menu-icon span:nth-child(2){
+  opacity: 0;
+}
+.sidebar-toggle .menu-icon span:last-child{
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* Sidebar is COLLAPSED: show hamburger */
+.app-shell.sidebar-collapsed .sidebar-toggle{
+  left: 18px;
+  right: auto;
+}
+.app-shell.sidebar-collapsed .menu-icon span:first-child,
+.app-shell.sidebar-collapsed .menu-icon span:last-child{
+  transform: none;
+}
+.app-shell.sidebar-collapsed .menu-icon span:nth-child(2){
+  opacity: 1;
+}
+
+/* Keep the content in normal flex flow: sidebar opens beside it,
+   and collapsing the sidebar gives the content the freed space. */
+.app-shell{
+  transition: gap .28s ease;
+}
+.sidebar{
+  transition: width .28s ease, padding .28s ease, opacity .2s ease, border-color .28s ease;
+}
+.content-column{
+  min-width: 0;
+  flex: 1 1 auto;
+  transition: width .28s ease, max-width .28s ease;
+}
+
+/* Mobile: the sidebar becomes a real expandable menu instead of
+   leaving a large blank area. */
+@media (max-width: 860px){
+  .app-shell{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .sidebar{
+    position: relative;
+    width: 100%;
+    height: auto;
+    max-height: 80vh;
+    padding: 22px 18px;
+    opacity: 1;
+    pointer-events: auto;
+    overflow: hidden;
+    transition: max-height .28s ease, padding .28s ease, opacity .2s ease;
+  }
+
+  .sidebar-toggle{
+    position: fixed;
+    top: 22px;
+    right: 22px;
+    left: auto;
+    z-index: 1000;
+  }
+
+  .app-shell.sidebar-collapsed{
+    gap: 0;
+  }
+
+  .app-shell.sidebar-collapsed .sidebar{
+    width: 100%;
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-color: transparent;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .app-shell.sidebar-collapsed .sidebar-toggle{
+    left: auto;
+    right: 22px;
+  }
+
+  .app-shell.sidebar-collapsed .sidebar .main-nav,
+  .app-shell.sidebar-collapsed .sidebar .sidebar-footer{
+    display: none;
+  }
+
+  .content-column{
+    width: 100%;
+  }
+}
