@@ -317,13 +317,26 @@ function buildNav(){
     btn.dataset.view = item.id;
     btn.addEventListener("click", () => {
       goToView(item.id);
-      $("#sidebar").classList.remove("open"); // auto-close on mobile after picking a section
+      if (window.matchMedia("(max-width: 860px)").matches){
+        $("#appShell").classList.add("sidebar-collapsed"); // auto-close on mobile after picking a section
+      }
     });
     nav.appendChild(btn);
   });
 }
 $("#sidebarToggle").addEventListener("click", () => {
-  $("#sidebar").classList.toggle("open");
+  const shell = $("#appShell");
+  shell.classList.toggle("sidebar-collapsed");
+
+  const collapsed = shell.classList.contains("sidebar-collapsed");
+  const expanded = !collapsed;
+
+  $("#sidebarToggle").setAttribute("aria-expanded", String(expanded));
+  $("#sidebarToggle").setAttribute(
+    "aria-label",
+    expanded ? "Close sidebar" : "Open sidebar"
+  );
+  $("#sidebarToggle").title = expanded ? "Close sidebar" : "Open sidebar";
 });
 function goToView(viewId){
   $$(".view").forEach(v => v.classList.add("hidden"));
