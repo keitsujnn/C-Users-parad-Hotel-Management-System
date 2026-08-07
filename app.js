@@ -257,6 +257,12 @@ async function bootAfterAuth(){
   $("#userName").textContent = profile.full_name;
   $("#roleBadge").textContent = profile.role.toUpperCase();
 
+  // Start with the menu closed everywhere — a clean, uncluttered first view.
+  // Tap the toggle button (top-left) to open it.
+  const shell = $("#appShell");
+  shell.classList.add("sidebar-collapsed");
+  $("#sidebarToggle").setAttribute("aria-expanded", "false");
+
   buildNav();
   goToView(defaultViewForRole(profile.role));
 }
@@ -317,14 +323,13 @@ function buildNav(){
     btn.dataset.view = item.id;
     btn.addEventListener("click", () => {
       goToView(item.id);
-      if (window.matchMedia("(max-width: 860px)").matches){
-        $("#appShell").classList.add("sidebar-collapsed"); // auto-close on mobile after picking a section
-      }
+      $("#appShell").classList.add("sidebar-collapsed"); // auto-close after picking a section
     });
     nav.appendChild(btn);
   });
 }
-$("#sidebarToggle").addEventListener("click", () => {
+$("#sidebarToggle").addEventListener("click", (e) => {
+  e.stopPropagation();
   const shell = $("#appShell");
   shell.classList.toggle("sidebar-collapsed");
 
@@ -337,6 +342,15 @@ $("#sidebarToggle").addEventListener("click", () => {
     expanded ? "Close sidebar" : "Open sidebar"
   );
   $("#sidebarToggle").title = expanded ? "Close sidebar" : "Open sidebar";
+});
+// Click anywhere outside the floating menu to close it
+document.addEventListener("click", (e) => {
+  const shell = $("#appShell");
+  if (!shell || shell.classList.contains("sidebar-collapsed")) return;
+  const sidebar = $("#sidebar");
+  if (sidebar.contains(e.target) || $("#sidebarToggle").contains(e.target)) return;
+  shell.classList.add("sidebar-collapsed");
+  $("#sidebarToggle").setAttribute("aria-expanded", "false");
 });
 function goToView(viewId){
   $$(".view").forEach(v => v.classList.add("hidden"));
