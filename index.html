@@ -113,14 +113,14 @@
 
 <!-- ============ APP SHELL (sidebar + content) ============ -->
 <div id="appShell" class="app-shell hidden">
-  <button id="sidebarToggle" class="sidebar-toggle" type="button"
-          aria-label="Close sidebar" aria-expanded="true" title="Close sidebar">
-    <span class="menu-icon" aria-hidden="true">
-      <span></span><span></span><span></span>
-    </span>
-  </button>
 
-  <aside id="sidebar" class="sidebar glass">
+  <div class="top-bar glass">
+    <button id="sidebarToggle" class="sidebar-toggle" type="button"
+            aria-label="Close sidebar" aria-expanded="true" title="Close sidebar">
+      <span class="menu-icon" aria-hidden="true">
+        <span></span><span></span><span></span>
+      </span>
+    </button>
     <div class="brand">
       <span class="brand-mark">HM</span>
       <div class="brand-text">
@@ -128,7 +128,9 @@
         <span class="brand-sub" id="roleBadge">—</span>
       </div>
     </div>
+  </div>
 
+  <aside id="sidebar" class="sidebar glass">
     <nav id="mainNav" class="main-nav"></nav>
 
     <div class="sidebar-footer">
